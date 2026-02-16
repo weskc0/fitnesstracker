@@ -2,60 +2,150 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>My Training Log</title>
+  <title>Day Planner & Training Assistant</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Hero / Date & Time -->
+  <section class="hero-time">
+    <div class="hero-left">
+      <div id="hero-greeting" class="hero-greeting">Good evening, Champion</div>
+      <div id="hero-date" class="hero-date">Sunday • Feb 15, 2026</div>
+      <div id="hero-time" class="hero-time">08:47 PM</div>
+      <div class="hero-subline">
+        Today’s focus:
+        <span id="hero-focus-text">Train hard. Build your future.</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-pill">Day planner · Training log</div>
+    </div>
+  </section>
+
+  <!-- Top header stats -->
   <header>
-    <h1>My Training Log</h1>
-    <div class="stats">
-      <div class="stat-box">
-        <span class="stat-label">Workouts this week</span>
-        <span id="stat-week" class="stat-value">0</span>
+    <h1>Today’s Command Center</h1>
+    <div class="top-controls">
+      <div class="today-date-control">
+        <label>
+          Planner date
+          <input type="date" id="planner-date">
+        </label>
+        <button id="planner-today-btn" class="secondary-btn">Today</button>
       </div>
-      <div class="stat-box">
-        <span class="stat-label">Current streak (days)</span>
-        <span id="stat-streak" class="stat-value">0</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-label">Total workouts</span>
-        <span id="stat-total" class="stat-value">0</span>
+      <div class="stats">
+        <div class="stat-box">
+          <span class="stat-label">Tasks today</span>
+          <span id="stat-tasks" class="stat-value">0 / 0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Workouts this week</span>
+          <span id="stat-week" class="stat-value">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Training streak (days)</span>
+          <span id="stat-streak" class="stat-value">0</span>
+        </div>
       </div>
     </div>
   </header>
 
   <main>
-    <section class="panel panel-form">
-      <h2>Log a Workout</h2>
-      <form id="workout-form">
-        <label>
-          Date
-          <input type="date" id="workout-date" required>
-        </label>
-        <label>
-          Title / Type
-          <input type="text" id="workout-type" placeholder="Run, Upper body, XC, etc." required>
-        </label>
-        <label>
-          Notes
-          <textarea id="workout-notes" rows="4" placeholder="Distance, sets/reps, how it felt..."></textarea>
-        </label>
-        <button type="submit">Save Workout</button>
-      </form>
+    <!-- Left column: tasks + schedule -->
+    <section class="column column-left">
+      <!-- Focus + tasks -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Today’s Focus & Tasks</h2>
+        </div>
+
+        <div class="focus-row">
+          <label>
+            Today’s focus
+            <input type="text" id="focus-input" placeholder="Example: Long run + deep work on coding project">
+          </label>
+          <button id="focus-save-btn" class="chip-btn">Save</button>
+        </div>
+
+        <div class="tasks-section">
+          <div class="tasks-header-row">
+            <span class="section-label">Tasks</span>
+            <span class="section-meta" id="tasks-meta">0 open · 0 done</span>
+          </div>
+          <div class="add-task-row">
+            <input type="text" id="task-input" placeholder="Add a task for today (e.g., XC workout, homework, editing)">
+            <button id="task-add-btn">Add</button>
+          </div>
+          <ul id="task-list"></ul>
+        </div>
+      </section>
+
+      <!-- Schedule -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Day Schedule</h2>
+          <span class="section-meta">Block out your day from morning to night.</span>
+        </div>
+        <div id="schedule-grid" class="schedule-grid">
+          <!-- Filled by JS -->
+        </div>
+      </section>
     </section>
 
-    <section class="panel panel-history">
-      <h2>Workout History</h2>
-      <div id="history-empty" class="empty-state">
-        No workouts logged yet. Add your first one above.
-      </div>
-      <ul id="workout-list"></ul>
+    <!-- Right column: workouts + notes -->
+    <section class="column column-right">
+      <!-- Workouts -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Training Log</h2>
+          <span class="section-meta">Log your workouts and keep the streak alive.</span>
+        </div>
+        <section class="panel-inner two-cols">
+          <div class="panel-sub">
+            <h3>Log a Workout</h3>
+            <form id="workout-form">
+              <label>
+                Date
+                <input type="date" id="workout-date" required>
+              </label>
+              <label>
+                Title / Type
+                <input type="text" id="workout-type" placeholder="XC run, upper body, intervals..." required>
+              </label>
+              <label>
+                Notes
+                <textarea id="workout-notes" rows="4" placeholder="Distance, sets/reps, RPE, how it felt..."></textarea>
+              </label>
+              <button type="submit">Save Workout</button>
+            </form>
+          </div>
+          <div class="panel-sub">
+            <h3>Recent Workouts</h3>
+            <div id="history-empty" class="empty-state">
+              No workouts logged yet. Add your first one on the left.
+            </div>
+            <ul id="workout-list"></ul>
+          </div>
+        </section>
+      </section>
+
+      <!-- Notes -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Daily Notes / Reflection</h2>
+          <span class="section-meta">Quick journal for wins, lessons, and ideas.</span>
+        </div>
+        <textarea id="notes-area" class="notes-area" rows="6" placeholder="What did you crush today? What needs work? Anything you want to remember?"></textarea>
+        <div class="notes-footer">
+          <span id="notes-status" class="notes-status">Autosaved</span>
+        </div>
+      </section>
     </section>
   </main>
 
   <footer>
-    <small>Data is stored locally in your browser (no account needed).</small>
+    <small>All data is stored locally in this browser. No accounts, no sync — just your life, tracked.</small>
   </footer>
 
   <script src="app.js"></script>
