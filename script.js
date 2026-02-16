@@ -12,11 +12,6 @@ function formatFullDate(d = new Date()) {
   return d.toLocaleDateString(undefined, opts);
 }
 
-function isoToDate(iso) {
-  const [y, m, d] = iso.split("-").map(Number);
-  return new Date(y, m - 1, d);
-}
-
 // DOM refs
 const gateEl = document.getElementById("gate");
 const gateTimeEl = document.getElementById("gate-time");
@@ -24,6 +19,7 @@ const gateDateEl = document.getElementById("gate-date");
 const gateMessageEl = document.getElementById("gate-message");
 
 const appEl = document.getElementById("app");
+const bodyEl = document.body;
 const sidebarDateEl = document.getElementById("sidebar-date");
 const navButtons = document.querySelectorAll(".nav-link");
 
@@ -58,6 +54,9 @@ const reflectionSaveBtn = document.getElementById("reflection-save-btn");
 const reflectionClearBtn = document.getElementById("reflection-clear-btn");
 const reflectionStatusEl = document.getElementById("reflection-status");
 
+const themeToggleBtn = document.getElementById("theme-toggle");
+const themeToggleIcon = document.getElementById("theme-toggle-icon");
+
 // Storage keys
 const KEY_TODAY_OVERVIEW = "coach_today_overview_v1";
 const KEY_SYSTEMS_ITEMS = "coach_systems_items_v1";
@@ -65,6 +64,7 @@ const KEY_SYSTEMS_STATE_PREFIX = "coach_systems_state_";
 const KEY_LOG = "coach_training_log_v1";
 const KEY_WEEKLY_PLAN = "coach_weekly_plan_v1";
 const KEY_REFLECTION = "coach_reflection_v1";
+const KEY_THEME = "coach_theme_v1";
 
 // State
 let todayOverview = {};
@@ -84,7 +84,9 @@ const DIRECTIONS = [
   "No one is coming to save you. Steward what you have.",
   "Show up, even tired. You’re building a man, not a moment.",
   "You know what needs to be done.",
-  "Honor God with your discipline, not just your words."
+  "Honor God with your discipline, not just your words.",
+  "Stack quiet, boring days. That’s where strength is built.",
+  "You prayed. Now move like it matters."
 ];
 
 // Scripture list (reference + short paraphrase)
@@ -104,6 +106,14 @@ const SCRIPTURES = [
   {
     ref: "Hebrews 12:11",
     text: "Discipline is painful now, but it produces a solid, lasting harvest."
+  },
+  {
+    ref: "Proverbs 6:23",
+    text: "Discipline is a lamp. Let it guide your steps, not your moods."
+  },
+  {
+    ref: "James 1:12",
+    text: "Stay steady under trial. God sees the quiet, faithful grind."
   }
 ];
 
@@ -133,6 +143,30 @@ function loadJSON(key, fallback) {
 
 function saveJSON(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
+}
+
+// THEME
+
+function applyTheme(theme) {
+  bodyEl.classList.remove("theme-light", "theme-dark");
+  bodyEl.classList.add(theme);
+  themeToggleIcon.textContent = theme === "theme-dark" ? "☀︎" : "☾";
+}
+
+function initTheme() {
+  const stored = loadJSON(KEY_THEME, null);
+  if (stored === "theme-dark" || stored === "theme-light") {
+    applyTheme(stored);
+  } else {
+    applyTheme("theme-light");
+  }
+
+  themeToggleBtn.addEventListener("click", () => {
+    const nowTheme = bodyEl.classList.contains("theme-dark") ? "theme-dark" : "theme-light";
+    const nextTheme = nowTheme === "theme-dark" ? "theme-light" : "theme-dark";
+    applyTheme(nextTheme);
+    saveJSON(KEY_THEME, nextTheme);
+  });
 }
 
 // GATE
@@ -223,12 +257,9 @@ function saveSystemsState() {
 
 function renderSystems() {
   systemsListEl.innerHTML = "";
-  let completed = 0;
-
   systemsItems.forEach((label, index) => {
     const id = `system-${index}`;
     const checked = !!systemsState[id];
-    if (checked) completed++;
 
     const row = document.createElement("div");
     row.className = "system-item";
@@ -259,11 +290,10 @@ function renderSystems() {
 
 function renderSystemsProgress() {
   const total = systemsItems.length;
-  const todayState = systemsState;
   let completed = 0;
   systemsItems.forEach((_, index) => {
     const id = `system-${index}`;
-    if (todayState[id]) completed++;
+    if (systemsState[id]) completed++;
   });
   systemsProgressTextEl.textContent = `${completed} / ${total} systems locked in`;
 }
@@ -286,11 +316,8 @@ function getLogEntries(dateISO) {
 function renderLog() {
   const entries = getLogEntries(currentLogDate);
   logBodyEl.innerHTML = "";
-  let totalSets = 0;
 
   entries.forEach((entry, index) => {
-    totalSets += Number(entry.sets || 0) || 0;
-
     const tr = document.createElement("tr");
 
     function makeCellInput(value, key) {
@@ -452,6 +479,9 @@ function scrollToSection(id) {
 // INIT
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Theme first (so gate colors are right)
+  initTheme();
+
   // Gate & sidebar
   initGate();
   updateSidebarDate();
@@ -490,7 +520,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .filter((l) => l.length > 0);
     systemsItems = lines;
     saveSystemsItems();
-    // Reset state keys to match new length
     systemsState = {};
     saveSystemsState();
     renderSystems();
