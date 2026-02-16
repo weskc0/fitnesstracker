@@ -1,0 +1,249 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #050816;
+  color: #f9fafb;
+}
+
+header {
+  padding: 1.5rem 1.5rem 0.75rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+  background: linear-gradient(135deg, #020617, #020617 40%, #0b1120);
+}
+
+h1 {
+  margin: 0 0 1rem;
+  font-size: 1.6rem;
+}
+
+h2 {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.stat-box {
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.6rem;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  min-width: 140px;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+main {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: flex-start;
+}
+
+.panel {
+  background: rgba(15, 23, 42, 0.95);
+  border-radius: 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  padding: 1rem 1.1rem 1.2rem;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.85);
+}
+
+.panel-form {
+  flex: 0.9;
+}
+
+.panel-history {
+  flex: 1.1;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  margin-bottom: 0.7rem;
+}
+
+input[type="date"],
+input[type="text"],
+textarea {
+  width: 100%;
+  margin-top: 0.3rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: #020617;
+  color: #e5e7eb;
+  font: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #64748b;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button[type="submit"] {
+  margin-top: 0.5rem;
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 999px;
+  border: none;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #022c22;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.45);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+}
+
+button[type="submit"]:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 34px rgba(16, 185, 129, 0.7);
+}
+
+button[type="submit"]:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
+}
+
+#workout-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.workout-item {
+  padding: 0.7rem 0.6rem;
+  border-radius: 0.7rem;
+  border: 1px solid rgba(30, 64, 175, 0.35);
+  background: radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 55%);
+  margin-bottom: 0.6rem;
+  display: flex;
+  gap: 0.55rem;
+}
+
+.workout-main {
+  flex: 1;
+}
+
+.workout-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.workout-type {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.workout-date {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.workout-notes {
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: #e5e7eb;
+  white-space: pre-wrap;
+}
+
+.workout-actions {
+  display: flex;
+  align-items: center;
+}
+
+.delete-btn {
+  border: none;
+  background: none;
+  color: #f97373;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(248, 113, 113, 0.5);
+  transition: background 0.08s ease, color 0.08s ease;
+}
+
+.delete-btn:hover {
+  background: rgba(248, 113, 113, 0.15);
+  color: #fecaca;
+}
+
+.empty-state {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* Scrollbar for history list (desktop) */
+#workout-list::-webkit-scrollbar {
+  width: 8px;
+}
+#workout-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+#workout-list::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.9);
+  border-radius: 999px;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #6b7280;
+  padding: 0.7rem 0.5rem 1rem;
+}
+
+/* Mobile layout */
+@media (max-width: 800px) {
+  main {
+    flex-direction: column;
+    padding: 0.75rem;
+  }
+
+  header {
+    padding: 1.1rem 0.9rem 0.6rem;
+  }
+
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  .panel {
+    padding: 0.85rem 0.9rem 1rem;
+  }
+
+  #workout-list {
+    max-height: none;
+  }
+}
