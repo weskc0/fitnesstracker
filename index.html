@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="theme-light">
   <!-- Landing Gate: Time & Date -->
   <div id="gate" class="gate">
     <div class="gate-inner">
@@ -36,7 +36,11 @@
       </nav>
 
       <div class="sidebar-bottom">
-        <span>For His glory. Stay consistent.</span>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+          <span class="theme-toggle-icon" id="theme-toggle-icon">☾</span>
+          <span class="theme-toggle-label">Dark</span>
+        </button>
+        <span class="sidebar-bottom-text">For His glory. Stay consistent.</span>
       </div>
     </aside>
 
@@ -186,7 +190,10 @@
           <div id="scripture-text" class="scripture-text">
             Whatever you do, do it for God’s glory. Don’t waste the reps.
           </div>
-          <button id="scripture-next-btn" class="btn-secondary">Next verse</button>
+          <div class="scripture-footer">
+            <button id="scripture-next-btn" class="btn-secondary">Next verse</button>
+            <span class="small muted">Short anchors only. No fluff.</span>
+          </div>
         </div>
       </section>
 
