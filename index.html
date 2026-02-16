@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Training Log</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>My Training Log</h1>
+    <div class="stats">
+      <div class="stat-box">
+        <span class="stat-label">Workouts this week</span>
+        <span id="stat-week" class="stat-value">0</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">Current streak (days)</span>
+        <span id="stat-streak" class="stat-value">0</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">Total workouts</span>
+        <span id="stat-total" class="stat-value">0</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel panel-form">
+      <h2>Log a Workout</h2>
+      <form id="workout-form">
+        <label>
+          Date
+          <input type="date" id="workout-date" required>
+        </label>
+        <label>
+          Title / Type
+          <input type="text" id="workout-type" placeholder="Run, Upper body, XC, etc." required>
+        </label>
+        <label>
+          Notes
+          <textarea id="workout-notes" rows="4" placeholder="Distance, sets/reps, how it felt..."></textarea>
+        </label>
+        <button type="submit">Save Workout</button>
+      </form>
+    </section>
+
+    <section class="panel panel-history">
+      <h2>Workout History</h2>
+      <div id="history-empty" class="empty-state">
+        No workouts logged yet. Add your first one above.
+      </div>
+      <ul id="workout-list"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <small>Data is stored locally in your browser (no account needed).</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
