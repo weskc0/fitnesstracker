@@ -1,6 +1,6 @@
 :root {
   --bg-body: #f3f4f6;
-  --bg-gate: #0b1120;
+  --bg-gate: #020617;
   --bg-sidebar: #f9fafb;
   --bg-main: #ffffff;
   --bg-card: #ffffff;
@@ -16,6 +16,26 @@
   --danger-soft: #fee2e2;
   --radius-card: 14px;
   --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
+}
+
+/* Dark theme overrides */
+body.theme-dark {
+  --bg-body: #020617;
+  --bg-gate: #000000;
+  --bg-sidebar: #020617;
+  --bg-main: #020617;
+  --bg-card: #020617;
+  --border-subtle: #1e293b;
+  --border-strong: #334155;
+  --text-main: #e5e7eb;
+  --text-soft: #9ca3af;
+  --text-softer: #6b7280;
+  --accent: #38bdf8;
+  --accent-soft: #0f172a;
+  --accent-strong: #0ea5e9;
+  --danger: #fca5a5;
+  --danger-soft: #7f1d1d;
+  --shadow-soft: 0 20px 55px rgba(0, 0, 0, 0.8);
 }
 
 *,
@@ -36,12 +56,16 @@ body {
   color: var(--text-main);
 }
 
+body.theme-dark {
+  background: radial-gradient(circle at top left, #020617 0, #000000 55%);
+}
+
 /* GATE */
 
 .gate {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at top, #020617 0, #020617 45%, #020617 100%);
+  background: radial-gradient(circle at top, var(--bg-gate) 0, var(--bg-gate) 45%, #000000 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,9 +79,10 @@ body {
 }
 
 .gate-time {
-  font-size: 3.2rem;
-  letter-spacing: 0.06em;
-  margin-bottom: 0.5rem;
+  font-size: 4.2rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
 }
 
 .gate-date {
@@ -65,13 +90,13 @@ body {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #9ca3af;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.9rem;
 }
 
 .gate-message {
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: #e5e7eb;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.7rem;
 }
 
 .gate-hint {
@@ -86,6 +111,7 @@ body {
 .hidden {
   opacity: 0;
   pointer-events: none;
+  transition: opacity 0.4s ease;
 }
 
 /* APP LAYOUT */
@@ -145,18 +171,44 @@ body {
   font-size: 0.9rem;
   color: var(--text-soft);
   cursor: pointer;
-  transition: background 0.08s ease, color 0.08s ease;
+  transition: background 0.08s ease, color 0.08s ease, transform 0.05s ease;
 }
 
 .nav-link:hover {
-  background: #e5e7eb;
+  background: rgba(148, 163, 184, 0.3);
   color: var(--text-main);
+  transform: translateX(1px);
 }
 
 .sidebar-bottom {
   margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar-bottom-text {
   font-size: 0.75rem;
   color: var(--text-softer);
+}
+
+/* Theme toggle */
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-soft);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.theme-toggle-icon {
+  font-size: 0.95rem;
 }
 
 /* MAIN */
@@ -198,6 +250,18 @@ body {
   border: 1px solid var(--border-subtle);
   padding: 1rem 1.1rem;
   box-shadow: var(--shadow-soft);
+  transition: border-color 0.08s ease, background 0.12s ease, box-shadow 0.12s ease;
+}
+
+body.theme-dark .card {
+  background: #020617;
+}
+
+/* subtle hover for cards on desktop */
+@media (min-width: 960px) {
+  .card:hover {
+    border-color: var(--border-strong);
+  }
 }
 
 .card-grid {
@@ -243,6 +307,15 @@ select {
   color: var(--text-main);
 }
 
+body.theme-dark input[type="text"],
+body.theme-dark input[type="number"],
+body.theme-dark input[type="date"],
+body.theme-dark textarea,
+body.theme-dark select {
+  background: #020617;
+  color: var(--text-main);
+}
+
 input::placeholder,
 textarea::placeholder {
   color: var(--text-softer);
@@ -274,6 +347,7 @@ textarea {
 
 .btn-primary:hover {
   background: var(--accent-strong);
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
@@ -289,7 +363,7 @@ textarea {
 }
 
 .btn-tertiary:hover {
-  background: #f3f4f6;
+  background: rgba(148, 163, 184, 0.15);
 }
 
 .btn-danger {
@@ -402,6 +476,10 @@ textarea {
   background: #f9fafb;
 }
 
+body.theme-dark .log-table-wrapper {
+  background: #020617;
+}
+
 .log-table {
   width: 100%;
   border-collapse: collapse;
@@ -410,6 +488,10 @@ textarea {
 
 .log-table thead {
   background: #f3f4f6;
+}
+
+body.theme-dark .log-table thead {
+  background: #020617;
 }
 
 .log-table th,
@@ -437,13 +519,6 @@ textarea {
   font-size: 0.84rem;
 }
 
-.log-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  margin-top: 0.6rem;
-}
-
 /* WEEKLY PLAN */
 
 .week-grid {
@@ -460,6 +535,10 @@ textarea {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+}
+
+body.theme-dark .week-day-card {
+  background: #020617;
 }
 
 .week-day-name {
@@ -494,6 +573,12 @@ textarea {
   color: var(--text-main);
 }
 
+.scripture-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 /* REFLECTIONS */
 
 .reflection-actions {
@@ -525,6 +610,13 @@ textarea {
   }
 
   .sidebar-bottom {
+    margin-top: 0;
+    margin-left: auto;
+    align-items: flex-end;
+    gap: 0.3rem;
+  }
+
+  .sidebar-bottom-text {
     display: none;
   }
 
@@ -549,5 +641,9 @@ textarea {
 
   .sidebar {
     flex-wrap: wrap;
+  }
+
+  .gate-time {
+    font-size: 3.1rem;
   }
 }
