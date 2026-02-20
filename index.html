@@ -19,13 +19,62 @@
     }
     #date { font-size: 1.8em; color: #888; margin-bottom: 10px; }
     #time { font-size: 5em; letter-spacing: 5px; }
+
+    /* Death screen overlay */
+    #death-screen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #330000 0%, #000000 60%);
+      color: #ffffff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      text-align: center;
+      z-index: 10000;
+      transition: opacity 0.4s ease;
+    }
+    #death-screen.active {
+      display: flex;
+    }
+    #death-message {
+      font-size: 1.8rem;
+      max-width: 80%;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.06em;
+    }
+    #death-subtext {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+    /* faint yellow eye for Prototype */
+    #death-eye {
+      position: absolute;
+      bottom: 12%;
+      right: 10%;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      box-shadow: 0 0 14px 4px rgba(255, 230, 70, 0.6);
+      background: radial-gradient(circle at 40% 40%, #ffffe0 0%, #ffe44a 45%, #aa7b00 70%, #000000 100%);
+      opacity: 0.18;
+    }
   </style>
 </head>
 <body>
   <div id="date">Loading date...</div>
   <div id="time">Loading time...</div>
 
+  <!-- Poppy-style death screen -->
+  <div id="death-screen">
+    <div id="death-message"></div>
+    <div id="death-subtext">GET UP.</div>
+    <div id="death-eye"></div>
+  </div>
+
   <script>
+    // ----- Clock -----
     function updateClock() {
       const now = new Date();
       document.getElementById('date').textContent = now.toLocaleDateString('en-US', {
@@ -43,6 +92,79 @@
     }
     setInterval(updateClock, 1000);
     updateClock();
+
+    // ----- Poppy-style death screen -----
+    const deathMessages = [
+      "You can fall apart later.",
+      "Nobody came here by choice.",
+      "You are too useful to lose.",
+      "Innovation is key. Remember that.",
+      "He is loose. This is not over.",
+      "The factory is not done with you.",
+      "We still have plans for you.",
+      "You can die later. Not now.",
+      "They are hungry. Don’t keep them waiting.",
+      "The Prototype is watching. Be wonderful."
+    ];
+
+    let deathScreenTimeout = null;
+
+    function showDeathScreen() {
+      const overlay = document.getElementById("death-screen");
+      const msgEl = document.getElementById("death-message");
+      const subEl = document.getElementById("death-subtext");
+
+      if (!overlay || !msgEl || !subEl) return;
+
+      // pick random message
+      const msg = deathMessages[Math.floor(Math.random() * deathMessages.length)];
+      msgEl.textContent = msg;
+      subEl.textContent = "GET UP.";
+
+      overlay.classList.add("active");
+      overlay.style.opacity = "1";
+
+      // auto hide after ~4 seconds
+      clearTimeout(deathScreenTimeout);
+      deathScreenTimeout = setTimeout(() => {
+        overlay.style.opacity = "0";
+        setTimeout(() => {
+          overlay.classList.remove("active");
+        }, 400);
+      }, 4000);
+    }
+
+    // Random-ish every ~2 minutes
+    function scheduleRandomDeath() {
+      const min = 90_000;  // 1.5 min
+      const max = 150_000; // 2.5 min
+      const delay = Math.floor(Math.random() * (max - min)) + min;
+      setTimeout(() => {
+        showDeathScreen();
+        scheduleRandomDeath();
+      }, delay);
+    }
+    scheduleRandomDeath();
+
+    // ----- 1006 key sequence trigger -----
+    const code1006 = ["1", "0", "0", "6"];
+    let buffer1006 = [];
+
+    document.addEventListener("keydown", (e) => {
+      // only track actual character keys
+      if (e.key.length > 1 && !e.key.startsWith("Arrow")) return;
+
+      buffer1006.push(e.key);
+      if (buffer1006.length > code1006.length) {
+        buffer1006.shift();
+      }
+
+      const match = code1006.every((k, i) => buffer1006[i] === k);
+      if (match) {
+        showDeathScreen();
+        buffer1006 = [];
+      }
+    });
   </script>
 </body>
 </html>
