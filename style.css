@@ -85,3 +85,47 @@ body {
   50% { text-shadow: -2px 0 var(--glitch-red), 2px 0 var(--glitch-blue); }
   100% { text-shadow: 2px 0 var(--glitch-red), -2px 0 var(--glitch-blue); }
 }
+/* Poppy-style Death Screen */
+#death-screen {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #330000 0%, #000000 60%);
+  color: #ffffff;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  text-align: center;
+  z-index: 9999;
+  transition: opacity 0.4s ease;
+}
+
+#death-screen.active {
+  display: flex;
+}
+
+#death-message {
+  font-size: 1.8rem;
+  max-width: 80%;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.06em;
+}
+
+#death-subtext {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* Faint yellow Prototype eye */
+#death-eye {
+  position: absolute;
+  bottom: 12%;
+  right: 10%;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  box-shadow: 0 0 14px 4px rgba(255, 230, 70, 0.6);
+  background: radial-gradient(circle at 40% 40%, #ffffe0 0%, #ffe44a 45%, #aa7b00 70%, #000000 100%);
+  opacity: 0.18;
+}
