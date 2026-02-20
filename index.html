@@ -1,130 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="style.css">
-<script src="script.js" defer></script><head>
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>1006</title>
-  <style>
-    body {
-      margin: 0; height: 100vh; background: radial-gradient(circle at center, #1a0a0a, #000);
-      color: #ff4444; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center;
-      overflow: hidden;
-    }
-    .container { text-align: center; padding: 20px; max-width: 400px; }
-    .clock {
-      width: 320px; height: 320px; margin: 0 auto 30px; position: relative; border-radius: 50%;
-      background: radial-gradient(circle, #333 0%, #111 50%, #000 100%);
-      border: 8px solid #444; box-shadow: inset 0 0 50px rgba(255,68,68,0.3), 0 0 40px rgba(255,68,68,0.5);
-      filter: drop-shadow(0 0 20px #ff4444);
-    }
-    .clock-face { position: absolute; inset: 20px; border-radius: 50%; background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,68,68,0.1) 2px 4px); }
-    .center { position: absolute; top: 50%; left: 50%; width: 24px; height: 24px; background: #ff4444; border-radius: 50%; transform: translate(-50%,-50%); box-shadow: 0 0 30px #ff4444; z-index: 10; }
-    /* Prototype Claw Hands - SVG for jagged, mechanical claws */
-    .hand { position: absolute; left: 50%; bottom: 50%; transform-origin: bottom center; filter: drop-shadow(0 0 10px #ff4444); z-index: 5; }
-    .hour-hand { width: 100px; height: 100px; }
-    .minute-hand { width: 140px; height: 140px; }
-    .second-hand { width: 160px; height: 160px; animation: twitch 2s infinite; }
-    @keyframes twitch { 0%, 90% { } 95% { transform: translateX(-50%) rotate(var(--rot)) scale(1.02); } 100% { } }
-    .progress-ring {
-      position: absolute; inset: -8px; border-radius: 50%;
-      background: conic-gradient(#ff4444 0% var(--progress,0%), #333 var(--progress) 100%);
-      opacity: 0.7; mask: radial-gradient(circle 70% at center, transparent 50%, black 50%);
-    }
-    #info { font-size: 1.4em; text-shadow: 0 0 10px #ff4444; margin: 20px 0; }
-    button {
-      padding: 12px 24px; margin: 8px; background: rgba(255,68,68,0.2); border: 2px solid #ff4444; color: #ff4444;
-      font-family: inherit; font-weight: bold; border-radius: 8px; cursor: pointer; transition: all 0.3s;
-      box-shadow: 0 0 15px rgba(255,68,68,0.4);
-    }
-    button:hover { background: rgba(255,68,68,0.4); transform: scale(1.05); }
-    button:active { transform: scale(0.95); }
-  </style>
+  <title>Clock</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <div class="clock">
-      <div class="progress-ring" id="progressRing"></div>
-      <div class="clock-face"></div>
-      <!-- Hour Claw Hand (SVG Prototype claw) -->
-      <svg class="hand hour-hand" id="hourHand" viewBox="0 0 100 100">
-        <defs>
-          <linearGradient id="metal" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#666"/>
-            <stop offset="50%" stop-color="#aaa"/>
-            <stop offset="100%" stop-color="#444"/>
-          </linearGradient>
-          <filter id="glow"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
-        <!-- Palm/Base -->
-        <path d="M40 80 Q50 70 60 80 L55 90 L45 90 Z" fill="#555" stroke="#ff4444" stroke-width="2" filter="url(#glow)"/>
-        <!-- Claws (jagged Prototype style) -->
-        <path d="M35 75 Q30 65 25 75 L20 85 L28 80 Z" fill="url(#metal)" stroke="#ff4444" stroke-width="1.5"/>
-        <path d="M45 70 Q42 58 38 70 L35 82 L42 78 Z" fill="url(#metal)" stroke="#ff4444" stroke-width="1.5"/>
-        <path d="M55 72 Q52 60 48 72 L45 84 L52 80 Z" fill="url(#metal)" stroke="#ff4444" stroke-width="1.5"/>
-        <path d="M65 76 Q60 66 55 76 L50 88 L58 82 Z" fill="url(#metal)" stroke="#ff4444" stroke-width="1.5"/>
-      </svg>
-      <!-- Minute Claw Hand (larger) -->
-      <svg class="hand minute-hand" id="minuteHand" viewBox="0 0 140 140">
-        <path d="M60 110 Q70 100 80 110 L75 125 L65 125 Z" fill="#666" stroke="#ffaa44" stroke-width="3" filter="url(#glow)"/>
-        <path d="M45 100 Q38 85 32 100 L27 115 L37 108 Z" fill="url(#metal)" stroke="#ffaa44" stroke-width="2"/>
-        <path d="M55 95 Q50 80 45 95 L42 112 L50 107 Z" fill="url(#metal)" stroke="#ffaa44" stroke-width="2"/>
-        <path d="M85 102 Q78 87 72 102 L68 120 L77 114 Z" fill="url(#metal)" stroke="#ffaa44" stroke-width="2"/>
-        <path d="M95 108 Q88 93 82 108 L78 126 L87 120 Z" fill="url(#metal)" stroke="#ffaa44" stroke-width="2"/>
-      </svg>
-      <!-- Second Claw Hand (sharpest, red glow) -->
-      <svg class="hand second-hand" id="secondHand" viewBox="0 0 160 160">
-        <path d="M70 130 Q80 120 90 130 L85 145 L75 145 Z" fill="#ff4444" stroke="#ff0000" stroke-width="4" filter="url(#glow)"/>
-        <path d="M50 115 Q42 98 35 115 L30 132 L42 124 Z" fill="url(#metal)" stroke="#ff0000" stroke-width="2.5"/>
-        <path d="M60 110 Q55 92 50 110 L47 130 L55 125 Z" fill="url(#metal)" stroke="#ff0000" stroke-width="2.5"/>
-        <path d="M100 118 Q92 100 85 118 L81 138 L92 131 Z" fill="url(#metal)" stroke="#ff0000" stroke-width="2.5"/>
-        <path d="M110 125 Q102 107 95 125 L91 145 L102 138 Z" fill="url(#metal)" stroke="#ff0000" stroke-width="2.5"/>
-      </svg>
-      <div class="center"></div>
-    </div>
-    <div id="info">Grab Your Goals | Steps: 0</div>
-    <div>
-      <button onclick="startWorkout()">Start Hunt</button>
-      <button onclick="stopWorkout()">Stop</button>
-      <button onclick="resetWorkout()">Reset</button>
-    </div>
+  <div id="clock" class="content">
+    <div id="date"></div>
+    <div id="time"></div>
   </div>
-  <script>
-    // Real-time Prototype Clock
-    function updateClock() {
-      const now = new Date();
-      const s = now.getSeconds();
-      const m = now.getMinutes() + s/60;
-      const h = (now.getHours() % 12) + m/60;
-      document.getElementById('secondHand').style.setProperty('--rot', `${s*6}deg`);
-      document.getElementById('minuteHand').style.setProperty('--rot', `${m*6}deg`);
-      document.getElementById('hourHand').style.setProperty('--rot', `${h*30}deg`);
-    }
-    setInterval(updateClock, 50); updateClock();
-
-    // Fitness Tracker Logic
-    let interval, elapsed=0, steps=0, goal=10000;
-    const infoEl = document.getElementById('info');
-    const progressEl = document.getElementById('progressRing');
-    function updateUI() {
-      const pct = Math.min((steps/goal)*100,100);
-      progressEl.style.setProperty('--progress', `${pct}%`);
-      infoEl.textContent = `Time: ${Math.floor(elapsed/60)}:${(elapsed%60).toString().padStart(2,'0')} | Steps: ${steps} (${Math.round(pct)}%)`;
-    }
-
-    function startWorkout() {
-      if(!interval) interval = setInterval(()=>{elapsed++; updateUI();},1000);
-      if('DeviceMotionEvent' in window) window.addEventListener('devicemotion',handleSteps);
-    }
-    function stopWorkout(){clearInterval(interval); interval=null;}
-    function resetWorkout(){stopWorkout(); elapsed=0; steps=0; updateUI();}
-    let lastAcc=0;
-    function handleSteps(e){
-      const acc = e.acceleration?.y || 0;
-      if(Math.abs(acc - lastAcc)>2){ steps++; updateUI(); }
-      lastAcc=acc;
-    }
-    updateUI();
-  </script>
+  <div id="motivation" class="content hidden">
+    <p id="verse"></p>
+  </div>
+  <div id="glitch" class="hidden">
+    <div class="glitch-overlay"></div>
+    <div class="glitch-quote"></div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
