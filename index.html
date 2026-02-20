@@ -20,35 +20,39 @@
     #date { font-size: 1.8em; color: #888; margin-bottom: 10px; }
     #time { font-size: 5em; letter-spacing: 5px; }
 
-    /* Death screen overlay */
+    /* Poppy-style Death Screen (flicker overlay) */
     #death-screen {
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at center, #330000 0%, #000000 60%);
+      background: radial-gradient(circle at center, rgba(51, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.7) 60%);
       color: #ffffff;
       display: none;
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      font-family: "Segoe UI", system-ui, sans-serif;
+      font-family: "Segoe UI", system-ui, sans-serif; /* swap to Videotype if you add it */
       text-align: center;
       z-index: 10000;
-      transition: opacity 0.4s ease;
+      transition: opacity 0.1s ease;
+      pointer-events: none;
     }
     #death-screen.active {
       display: flex;
     }
     #death-message {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       max-width: 80%;
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.06em;
+      margin-bottom: 0.3rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
     #death-subtext {
-      font-size: 1.1rem;
-      opacity: 0.9;
+      font-size: 1rem;
+      opacity: 0.95;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
     }
-    /* faint yellow eye for Prototype */
+    /* faint yellow Prototype eye */
     #death-eye {
       position: absolute;
       bottom: 12%;
@@ -66,7 +70,7 @@
   <div id="date">Loading date...</div>
   <div id="time">Loading time...</div>
 
-  <!-- Poppy-style death screen -->
+  <!-- Poppy-style death screen flicker -->
   <div id="death-screen">
     <div id="death-message"></div>
     <div id="death-subtext">GET UP.</div>
@@ -93,7 +97,7 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // ----- Poppy-style death screen -----
+    // ----- Poppy-style death messages -----
     const deathMessages = [
       "You can fall apart later.",
       "Nobody came here by choice.",
@@ -117,22 +121,27 @@
       if (!overlay || !msgEl || !subEl) return;
 
       const msg = deathMessages[Math.floor(Math.random() * deathMessages.length)];
-      msgEl.textContent = msg;
+      msgEl.textContent = msg.toUpperCase();
       subEl.textContent = "GET UP.";
 
       overlay.classList.add("active");
-      overlay.style.opacity = "1";
+      overlay.style.opacity = "0";
+
+      // quick flicker in
+      setTimeout(() => {
+        overlay.style.opacity = "1";
+      }, 30);
 
       clearTimeout(deathScreenTimeout);
       deathScreenTimeout = setTimeout(() => {
         overlay.style.opacity = "0";
         setTimeout(() => {
           overlay.classList.remove("active");
-        }, 400);
-      }, 4000);
+        }, 120);
+      }, 2000); // visible about 2 seconds
     }
 
-    // Random-ish every ~2 minutes
+    // Random-ish every ~2 minutes (1.5–2.5 min window)
     function scheduleRandomDeath() {
       const min = 90_000;  // 1.5 min
       const max = 150_000; // 2.5 min
