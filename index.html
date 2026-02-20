@@ -3,21 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clock</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Clock Test - Self-Contained</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #111;
+      color: #eee;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    #date { font-size: 1.8em; color: #888; margin-bottom: 10px; }
+    #time { font-size: 5em; letter-spacing: 5px; }
+  </style>
 </head>
 <body>
-  <div id="clock" class="content">
-    <div id="date"></div>
-    <div id="time"></div>
-  </div>
-  <div id="motivation" class="content hidden">
-    <p id="verse"></p>
-  </div>
-  <div id="glitch" class="hidden">
-    <div class="glitch-overlay"></div>
-    <div class="glitch-quote"></div>
-  </div>
-  <script src="script.js"></script>
+  <div id="date">Loading date...</div>
+  <div id="time">Loading time...</div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('date').textContent = now.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      document.getElementById('time').textContent = now.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      });
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
 </body>
 </html>
