@@ -116,7 +116,6 @@
 
       if (!overlay || !msgEl || !subEl) return;
 
-      // pick random message
       const msg = deathMessages[Math.floor(Math.random() * deathMessages.length)];
       msgEl.textContent = msg;
       subEl.textContent = "GET UP.";
@@ -124,7 +123,6 @@
       overlay.classList.add("active");
       overlay.style.opacity = "1";
 
-      // auto hide after ~4 seconds
       clearTimeout(deathScreenTimeout);
       deathScreenTimeout = setTimeout(() => {
         overlay.style.opacity = "0";
@@ -151,7 +149,6 @@
     let buffer1006 = [];
 
     document.addEventListener("keydown", (e) => {
-      // only track actual character keys
       if (e.key.length > 1 && !e.key.startsWith("Arrow")) return;
 
       buffer1006.push(e.key);
