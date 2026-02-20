@@ -1,118 +1,87 @@
 :root {
-  --bg: #000;
-  --clock-bg: #111;
-  --red-glow: #ff4444;
-  --metal-light: #aaa;
-  --metal-dark: #444;
-  --shadow: 0 0 30px;
+  --bg: #111;
+  --text: #eee;
+  --accent: #888;
+  --glitch-red: rgba(255, 0, 0, 0.2);
+  --glitch-blue: rgba(0, 255, 255, 0.2);
 }
 
 body {
   margin: 0;
   height: 100vh;
-  background: radial-gradient(circle at center, #1a0a0a, var(--bg));
-  color: var(--red-glow);
-  font-family: 'Courier New', monospace;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Courier New', monospace;
+  text-align: center;
   overflow: hidden;
 }
 
-.container {
-  text-align: center;
+.content {
+  font-size: 2em;
   padding: 20px;
-  max-width: 400px;
-  width: 90%;
 }
 
-.clock {
-  width: 320px;
-  height: 320px;
-  margin: 0 auto 30px;
-  position: relative;
-  border-radius: 50%;
-  background: radial-gradient(circle, #333 0%, var(--clock-bg) 50%, #000 100%);
-  border: 8px solid #444;
-  box-shadow: inset 0 0 50px rgba(255,68,68,0.3), var(--shadow) rgba(255,68,68,0.5);
-  filter: drop-shadow(0 0 20px var(--red-glow));
+#date { font-size: 1.2em; color: var(--accent); }
+#time { font-size: 2.5em; }
+
+.hidden { display: none; }
+
+#motivation p {
+  max-width: 80%;
+  margin: 0 auto;
+  font-style: italic;
+  line-height: 1.5;
 }
 
-.clock-face {
+/* Glitch Easter Egg */
+#glitch {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+#glitch.show { opacity: 1; }
+
+.glitch-overlay {
   position: absolute;
-  inset: 20px;
-  border-radius: 50%;
-  background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,68,68,0.08) 2px 4px);
-  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(0deg, var(--glitch-red) 0 2px, transparent 2px 4px);
+  mix-blend-mode: screen;
+  animation: glitch-scan 0.5s infinite alternate;
 }
 
-.center {
+@keyframes glitch-scan {
+  0% { transform: translate(0); }
+  100% { transform: translate(2px, 2px); filter: blur(1px); }
+}
+
+.glitch-quote {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 24px;
-  height: 24px;
-  background: var(--red-glow);
-  border-radius: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: var(--shadow) var(--red-glow);
-  z-index: 10;
+  font-size: 1.5em;
+  color: rgba(255, 255, 255, 0.15); /* Barely visible */
+  text-shadow: 0 0 10px var(--glitch-red);
+  max-width: 80%;
+  animation: glitch-text 1s infinite;
 }
 
-.hand {
-  position: absolute;
-  left: 50%;
-  bottom: 50%;
-  transform-origin: bottom center;
-  filter: drop-shadow(0 0 12px var(--red-glow));
-  z-index: 5;
-}
-
-.hour-hand   { width: 100px;  height: 100px; }
-.minute-hand { width: 140px;  height: 140px; }
-.second-hand { width: 160px;  height: 160px; animation: twitch 3s infinite; }
-
-@keyframes twitch {
-  0%, 92%   { }
-  95%, 98%  { transform: translateX(-50%) rotate(var(--rot)) scale(1.03); }
-  100%      { }
-}
-
-.progress-ring {
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  background: conic-gradient(var(--red-glow) 0% var(--progress, 0%), #222 var(--progress) 100%);
-  opacity: 0.7;
-  mask: radial-gradient(circle 68% at center, transparent 50%, black 50%);
-  pointer-events: none;
-}
-
-#info {
-  font-size: 1.4em;
-  text-shadow: 0 0 10px var(--red-glow);
-  margin: 20px 0;
-}
-
-button {
-  padding: 12px 24px;
-  margin: 8px;
-  background: rgba(255,68,68,0.15);
-  border: 2px solid var(--red-glow);
-  color: var(--red-glow);
-  font-family: inherit;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: var(--shadow) rgba(255,68,68,0.3);
-}
-
-button:hover {
-  background: rgba(255,68,68,0.35);
-  transform: scale(1.05);
-}
-
-button:active {
-  transform: scale(0.95);
+@keyframes glitch-text {
+  0% { text-shadow: 2px 0 var(--glitch-red), -2px 0 var(--glitch-blue); }
+  50% { text-shadow: -2px 0 var(--glitch-red), 2px 0 var(--glitch-blue); }
+  100% { text-shadow: 2px 0 var(--glitch-red), -2px 0 var(--glitch-blue); }
 }
