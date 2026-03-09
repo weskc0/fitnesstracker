@@ -2,175 +2,1016 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title>Brotato Balance Patch Shakes Up the Arena</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clock Test - Self-Contained</title>
   <style>
+    :root {
+      --bg: #0b0c10;
+      --bg-alt: #13141c;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.1);
+      --border: #1f2933;
+      --danger: #f97373;
+      --success: #4ade80;
+      --card-radius: 12px;
+      --shadow-soft: 0 18px 45px rgba(0,0,0,0.6);
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    /* Theme modifiers */
+    .theme-default {
+      --bg: #020617;
+      --bg-alt: #070f1f;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.14);
+      --border: #1f2937;
+    }
+
+    .theme-dark {
+      --bg: #050816;
+      --bg-alt: #0b1120;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-soft: rgba(99, 102, 241, 0.18);
+      --border: #1e293b;
+    }
+
+    .theme-light {
+      --bg: #f3f4f6;
+      --bg-alt: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --accent-soft: rgba(37, 99, 235, 0.08);
+      --border: #d1d5db;
+    }
+
+    .theme-high-contrast {
+      --bg: #000000;
+      --bg-alt: #000000;
+      --text: #ffffff;
+      --muted: #e5e5e5;
+      --accent: #00ff00;
+      --accent-soft: rgba(0, 255, 0, 0.22);
+      --border: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      height: 100vh;
-      background: #111;
-      color: #eee;
-      font-family: 'Courier New', monospace;
+      min-height: 100vh;
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
       display: flex;
-      flex-direction: column;
       justify-content: center;
-      align-items: center;
-      text-align: center;
+      align-items: flex-start;
+      padding: 24px 12px;
+      transition: background 0.25s ease, color 0.25s ease;
     }
-    #date { font-size: 1.8em; color: #888; margin-bottom: 10px; }
-    #time { font-size: 5em; letter-spacing: 5px; }
 
-    /* Poppy-style Death Screen (flicker overlay) */
-    #death-screen {
+    .app-root {
+      width: 100%;
+      max-width: 1100px;
+      position: relative;
+    }
+
+    .card {
+      background: var(--bg-alt);
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border);
+      padding: 20px 18px;
+    }
+
+    @media (min-width: 768px) {
+      .card {
+        padding: 26px 28px;
+      }
+    }
+
+    .article-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .article-title-block {
+      flex: 1;
+      min-width: 0;
+    }
+
+    h1.article-title {
+      font-size: 1.6rem;
+      line-height: 1.2;
+      margin: 0 0 4px;
+      letter-spacing: 0.01em;
+    }
+
+    @media (min-width: 768px) {
+      h1.article-title {
+        font-size: 2rem;
+      }
+    }
+
+    .article-subtitle {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .article-meta {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .article-meta span + span::before {
+      content: "•";
+      margin: 0 6px;
+      opacity: 0.7;
+    }
+
+    .settings-trigger {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 1px solid transparent;
+      color: var(--muted);
+      background: transparent;
+      transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+      flex-shrink: 0;
+    }
+
+    .settings-trigger span {
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .settings-trigger:hover {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .settings-trigger:active {
+      transform: scale(0.96);
+    }
+
+    .article-body {
+      margin-top: 16px;
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .article-body p {
+      margin: 0 0 12px;
+    }
+
+    .feature-list {
+      margin: 14px 0 4px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-soft), transparent);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .feature-list-title {
+      font-weight: 600;
+      font-size: 0.93rem;
+      margin-bottom: 6px;
+    }
+
+    .feature-list ul {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 0.93rem;
+    }
+
+    .feature-list li {
+      margin-bottom: 4px;
+    }
+
+    .divider {
+      margin: 18px 0 16px;
+      border: none;
+      border-top: 1px dashed rgba(148, 163, 184, 0.4);
+    }
+
+    /* Login modal */
+    .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at center, rgba(51, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.7) 60%);
-      color: #ffffff;
+      background: rgba(0,0,0,0.6);
       display: none;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
-      font-family: "Segoe UI", system-ui, sans-serif; /* swap to Videotype if you add it */
-      text-align: center;
-      z-index: 10000;
-      transition: opacity 0.1s ease;
-      pointer-events: none;
+      z-index: 40;
+      backdrop-filter: blur(3px);
     }
-    #death-screen.active {
+
+    .modal-backdrop.visible {
       display: flex;
     }
-    #death-message {
-      font-size: 1.6rem;
-      max-width: 80%;
-      margin-bottom: 0.3rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+
+    .modal {
+      width: 100%;
+      max-width: 340px;
+      background: var(--bg-alt);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 38px rgba(0,0,0,0.7);
+      padding: 18px 18px 16px;
+      position: relative;
     }
-    #death-subtext {
-      font-size: 1rem;
-      opacity: 0.95;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+
+    .modal-title {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
     }
-    /* faint yellow Prototype eye */
-    #death-eye {
+
+    .modal-sub {
+      margin: 0 0 12px;
+      font-size: 0.83rem;
+      color: var(--muted);
+    }
+
+    .field {
+      margin-bottom: 10px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+      color: var(--muted);
+    }
+
+    .input {
+      width: 100%;
+      padding: 7px 9px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+    }
+
+    .theme-light .input {
+      background: #f9fafb;
+    }
+
+    .input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent-soft);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      font-size: 0.82rem;
+      padding: 6px 14px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      background: var(--accent-soft);
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: rgba(148, 163, 184, 0.16);
+      transform: translateY(-0.5px);
+    }
+
+    .btn:active {
+      transform: translateY(0.5px) scale(0.99);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #020617;
+      border-color: rgba(15, 23, 42, 0.8);
+    }
+
+    .btn-primary:hover {
+      background: #0ea5e9;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border-color: rgba(148, 163, 184, 0.4);
+      color: var(--muted);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: #f9fafb;
+      border-color: #b91c1c;
+    }
+
+    .btn-danger:hover {
+      background: #f97373;
+    }
+
+    .error-text {
+      font-size: 0.78rem;
+      color: var(--danger);
+      margin-top: 6px;
+      min-height: 14px;
+    }
+
+    /* Control panel */
+    .control-wrapper {
+      margin-top: 18px;
+    }
+
+    .control-panel {
+      display: none;
+      border-radius: var(--card-radius);
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.15), transparent 60%), var(--bg-alt);
+      box-shadow: var(--shadow-soft);
+      padding: 16px 14px 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .control-panel::before {
+      content: "";
       position: absolute;
-      bottom: 12%;
-      right: 10%;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      box-shadow: 0 0 14px 4px rgba(255, 230, 70, 0.6);
-      background: radial-gradient(circle at 40% 40%, #ffffe0 0%, #ffe44a 45%, #aa7b00 70%, #000000 100%);
-      opacity: 0.18;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(148,163,184,0.08), transparent 40%, rgba(56,189,248,0.04));
+      opacity: 0.75;
+      pointer-events: none;
+    }
+
+    .control-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .control-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .control-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .pill {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .control-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    @media (min-width: 768px) {
+      .control-grid {
+        flex-direction: row;
+        align-items: flex-end;
+      }
+    }
+
+    .control-col {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .control-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .url-input {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .select {
+      width: 100%;
+      padding: 7px 9px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text);
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+    }
+
+    .theme-light .select {
+      background: #f9fafb;
+    }
+
+    .select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent-soft);
+    }
+
+    .small-text {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .status-text {
+      font-size: 0.78rem;
+      color: var(--muted);
+      min-height: 16px;
+      margin-top: 3px;
+    }
+
+    .status-text--warning {
+      color: #fbbf24;
+    }
+
+    .status-text--error {
+      color: #f97373;
+    }
+
+    .status-text--ok {
+      color: #4ade80;
+    }
+
+    .iframe-shell {
+      margin-top: 12px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      background: #020617;
+      position: relative;
+    }
+
+    .theme-light .iframe-shell {
+      background: #ffffff;
+    }
+
+    iframe#previewFrame {
+      width: 100%;
+      border: none;
+      display: block;
+      background: #000;
+      height: 60vh;
+      max-height: 620px;
+    }
+
+    @media (max-width: 640px) {
+      iframe#previewFrame {
+        height: 62vh;
+      }
+    }
+
+    /* Panic safe view */
+    .safe-view {
+      display: none;
+      margin-top: 18px;
+      border-radius: var(--card-radius);
+      border: 1px solid var(--border);
+      background: var(--bg-alt);
+      padding: 18px 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .safe-title {
+      margin: 0 0 6px;
+      font-size: 1.1rem;
+    }
+
+    .safe-sub {
+      margin: 0 0 14px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .safe-list {
+      margin: 0;
+      padding-left: 16px;
+      font-size: 0.9rem;
+    }
+
+    .safe-list li {
+      margin-bottom: 6px;
+    }
+
+    /* Customization row */
+    .custom-row {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .custom-row .field-inline {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    @media (min-width: 768px) {
+      .custom-row .field-inline {
+        flex: 0 0 auto;
+      }
+    }
+
+    .wallpaper-preview {
+      margin-top: 6px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Optional dynamic wallpaper */
+    .wallpaper-enabled body,
+    body.wallpaper-active {
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
     }
   </style>
 </head>
 <body>
-  <div id="date">Loading date...</div>
-  <div id="time">Loading time...</div>
+  <div class="app-root theme-default" id="appRoot">
 
-  <!-- Poppy-style death screen flicker -->
-  <div id="death-screen">
-    <div id="death-message"></div>
-    <div id="death-subtext">GET UP.</div>
-    <div id="death-eye"></div>
+    <!-- Fake Brotato article card -->
+    <article class="card" id="articleCard">
+      <header class="article-header">
+        <div class="article-title-block">
+          <h1 class="article-title">Brotato Devs Tease “Endless Potato” Mode in Surprise Patch</h1>
+          <p class="article-subtitle">
+            Roguelite fans brace for wilder builds, more bullets, and one extremely overcaffeinated tuber.
+          </p>
+          <div class="article-meta">
+            <span>By Lina “PatchNotes” Rivera</span>
+            <span>Updated March 9, 2026</span>
+            <span>Early Access News Desk</span>
+          </div>
+        </div>
+        <!-- Subtle settings trigger (entry to login) -->
+        <button class="settings-trigger" id="settingsTrigger" aria-label="Settings">
+          <span>⚙️</span>
+        </button>
+      </header>
+
+      <section class="article-body">
+        <p>
+          The arena in <strong>Brotato</strong> just got a lot louder. A surprise balance patch, quietly
+          pushed to test branches overnight, is experimenting with an experimental “Endless Potato” mode
+          that removes the final wave and asks a simple question: how long can one extremely armed root
+          vegetable survive?
+        </p>
+        <p>
+          According to an internal dev note spotted on the public changelog, the new mode leans harder into
+          the chaotic buildcrafting that made Brotato so bingeable in the first place. Enemies scale past the
+          usual cap, shops roll in stranger combinations, and defensive items pick up new synergies designed
+          to keep glass‑cannon potatoes alive just long enough to make terrible decisions.
+        </p>
+
+        <div class="feature-list">
+          <div class="feature-list-title">Highlights from the experimental patch</div>
+          <ul>
+            <li>Endless waves with escalating enemy modifiers and rare “calm” rounds to catch your breath.</li>
+            <li>Prototype relics that alter the arena rules mid‑run, like double dashes or rotating hazard rings.</li>
+            <li>Reworked melee trees so brawling Brotatos scale better into the late game without becoming invincible.</li>
+            <li>A new “Commentator” announcer voice option that roasts your build choices between rounds.</li>
+            <li>Opt‑in challenge toggles so players can stack mutators instead of picking a single difficulty preset.</li>
+          </ul>
+        </div>
+
+        <p>
+          The developers stress that everything in this experimental patch is subject to change, and that
+          leaderboards for the mode may remain separate or purely local. Still, it is a clear signal that Brotato’s
+          endgame is evolving past simple wave clears and into a more sandbox‑style power fantasy for players who
+          have memorized every weapon pairing on the roster.
+        </p>
+        <p>
+          If the tests go well, the studio hints that Endless Potato could become a permanent alternate queue,
+          complete with cosmetic unlocks for particularly cursed builds that somehow refuse to die. Until then,
+          veterans might want to dust off their favorite potatoes and start theorycrafting new paths to absurdity.
+        </p>
+      </section>
+      <hr class="divider">
+      <p class="article-body" style="font-size:0.84rem;color:var(--muted);margin-top:4px;">
+        Editor’s note: This is an early look at an experimental patch. Details, tuning values, and even feature
+        names may change before they are rolled into the main public branch.
+      </p>
+    </article>
+
+    <!-- Control panel (hidden until login succeeds) -->
+    <section class="control-wrapper">
+      <div class="control-panel" id="controlPanel">
+        <div class="control-inner">
+          <div class="control-header">
+            <div class="control-title">Embedded tools</div>
+            <span class="pill">experimental utilities</span>
+          </div>
+
+          <!-- URL + actions -->
+          <div class="control-grid">
+            <div class="control-col">
+              <label class="control-label" for="urlInput">Target URL</label>
+              <div class="control-row">
+                <input
+                  id="urlInput"
+                  class="input url-input"
+                  type="text"
+                  placeholder="https://example.com or example.com"
+                  autocomplete="off"
+                  spellcheck="false"
+                >
+                <button class="btn btn-primary" id="loadBtn">Load in iframe</button>
+                <button class="btn" id="blankBtn">Open in about:blank</button>
+              </div>
+              <div class="status-text" id="urlStatus"></div>
+            </div>
+
+            <div class="control-col">
+              <label class="control-label" for="themeSelect">Theme</label>
+              <select id="themeSelect" class="select">
+                <option value="default">Default</option>
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
+                <option value="high-contrast">High contrast</option>
+              </select>
+              <p class="small-text">
+                Themes adjust page chrome, control panel accents, and iframe framing.
+              </p>
+            </div>
+          </div>
+
+          <!-- Customization row -->
+          <div class="custom-row">
+            <div class="field-inline">
+              <label class="control-label" for="tabTitleInput">Custom tab title</label>
+              <input id="tabTitleInput" class="input" type="text" placeholder="Homework dashboard">
+            </div>
+            <div class="field-inline">
+              <label class="control-label" for="wallpaperInput">Custom wallpaper image</label>
+              <input id="wallpaperInput" class="input" type="file" accept="image/*">
+              <div class="wallpaper-preview" id="wallpaperStatus">Optional: pick an image to skin the background.</div>
+            </div>
+          </div>
+
+          <!-- Action row -->
+          <div class="control-row" style="margin-top:10px; justify-content: space-between;">
+            <div class="control-row" style="gap:8px;">
+              <button class="btn" id="fullscreenBtn">Fullscreen iframe</button>
+              <span class="status-text" id="fullscreenStatus"></span>
+            </div>
+            <div class="control-row" style="gap:8px;">
+              <button class="btn btn-danger" id="panicBtn">Panic</button>
+            </div>
+          </div>
+
+          <!-- Iframe viewport -->
+          <div class="iframe-shell" style="margin-top:12px;">
+            <iframe
+              id="previewFrame"
+              title="Embedded site preview"
+              sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Safe content view (shown after Panic) -->
+      <div class="safe-view" id="safeView">
+        <h2 class="safe-title">Weekly Study Notes</h2>
+        <p class="safe-sub">
+          Quick scratchpad for homework tasks, reminders, and focus habits. Update as you go.
+        </p>
+        <ul class="safe-list">
+          <li><strong>Math:</strong> Review practice problems for the next quiz, especially word problems and graphing.</li>
+          <li><strong>English:</strong> Finish reading the current chapter and jot down three key quotes or ideas.</li>
+          <li><strong>Science:</strong> Summarize today’s lab in 3–4 sentences and note anything that was confusing.</li>
+          <li><strong>To‑do:</strong> Clear out old tabs, plug in your laptop, and set a timer block for quiet work.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Login modal -->
+    <div class="modal-backdrop" id="loginModalBackdrop">
+      <div class="modal">
+        <h2 class="modal-title">Reader tools login</h2>
+        <p class="modal-sub">
+          Access extra utilities associated with this article. Use demo credentials only.
+        </p>
+        <div class="field">
+          <label for="usernameInput">Username</label>
+          <input id="usernameInput" class="input" type="text" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="passwordInput">Password</label>
+          <input id="passwordInput" class="input" type="password" autocomplete="off">
+        </div>
+        <div class="error-text" id="loginError"></div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" id="cancelLoginBtn">Cancel</button>
+          <button class="btn btn-primary" id="loginBtn">Login</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    // ----- Clock -----
-    function updateClock() {
-      const now = new Date();
-      document.getElementById('date').textContent = now.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-      document.getElementById('time').textContent = now.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true
-      });
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
+    (function () {
+      const VALID_USER = "theo1188";
+      const VALID_PASS = "1006";
 
-    // ----- Poppy-style death messages -----
-    const deathMessages = [
-      "You can fall apart later.",
-      "Nobody came here by choice.",
-      "You are too useful to lose.",
-      "Innovation is key. Remember that.",
-      "He is loose. This is not over.",
-      "The factory is not done with you.",
-      "We still have plans for you.",
-      "You can die later. Not now.",
-      "They are hungry. Don’t keep them waiting.",
-      "The Prototype is watching. Be wonderful."
-    ];
+      const appRoot = document.getElementById("appRoot");
+      const settingsTrigger = document.getElementById("settingsTrigger");
+      const loginBackdrop = document.getElementById("loginModalBackdrop");
+      const loginBtn = document.getElementById("loginBtn");
+      const cancelLoginBtn = document.getElementById("cancelLoginBtn");
+      const usernameInput = document.getElementById("usernameInput");
+      const passwordInput = document.getElementById("passwordInput");
+      const loginError = document.getElementById("loginError");
 
-    let deathScreenTimeout = null;
+      const controlPanel = document.getElementById("controlPanel");
+      const urlInput = document.getElementById("urlInput");
+      const loadBtn = document.getElementById("loadBtn");
+      const blankBtn = document.getElementById("blankBtn");
+      const urlStatus = document.getElementById("urlStatus");
+      const themeSelect = document.getElementById("themeSelect");
+      const previewFrame = document.getElementById("previewFrame");
+      const fullscreenBtn = document.getElementById("fullscreenBtn");
+      const fullscreenStatus = document.getElementById("fullscreenStatus");
+      const panicBtn = document.getElementById("panicBtn");
+      const safeView = document.getElementById("safeView");
+      const tabTitleInput = document.getElementById("tabTitleInput");
+      const wallpaperInput = document.getElementById("wallpaperInput");
+      const wallpaperStatus = document.getElementById("wallpaperStatus");
 
-    function showDeathScreen() {
-      const overlay = document.getElementById("death-screen");
-      const msgEl = document.getElementById("death-message");
-      const subEl = document.getElementById("death-subtext");
+      let loggedIn = false;
+      let wallpaperUrl = null;
 
-      if (!overlay || !msgEl || !subEl) return;
-
-      const msg = deathMessages[Math.floor(Math.random() * deathMessages.length)];
-      msgEl.textContent = msg.toUpperCase();
-      subEl.textContent = "GET UP.";
-
-      overlay.classList.add("active");
-      overlay.style.opacity = "0";
-
-      // quick flicker in
-      setTimeout(() => {
-        overlay.style.opacity = "1";
-      }, 30);
-
-      clearTimeout(deathScreenTimeout);
-      deathScreenTimeout = setTimeout(() => {
-        overlay.style.opacity = "0";
-        setTimeout(() => {
-          overlay.classList.remove("active");
-        }, 120);
-      }, 2000); // visible about 2 seconds
-    }
-
-    // Random-ish every ~2 minutes (1.5–2.5 min window)
-    function scheduleRandomDeath() {
-      const min = 90_000;  // 1.5 min
-      const max = 150_000; // 2.5 min
-      const delay = Math.floor(Math.random() * (max - min)) + min;
-      setTimeout(() => {
-        showDeathScreen();
-        scheduleRandomDeath();
-      }, delay);
-    }
-    scheduleRandomDeath();
-
-    // ----- 1006 key sequence trigger -----
-    const code1006 = ["1", "0", "0", "6"];
-    let buffer1006 = [];
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key.length > 1 && !e.key.startsWith("Arrow")) return;
-
-      buffer1006.push(e.key);
-      if (buffer1006.length > code1006.length) {
-        buffer1006.shift();
+      function openLogin() {
+        loginBackdrop.classList.add("visible");
+        loginError.textContent = "";
+        usernameInput.value = "";
+        passwordInput.value = "";
+        setTimeout(() => usernameInput.focus(), 10);
       }
 
-      const match = code1006.every((k, i) => buffer1006[i] === k);
-      if (match) {
-        showDeathScreen();
-        buffer1006 = [];
+      function closeLogin() {
+        loginBackdrop.classList.remove("visible");
       }
-    });
+
+      function normalizeUrl(raw) {
+        let url = raw.trim();
+        if (!url) return "";
+        if (!/^https?:\/\//i.test(url)) {
+          url = "https://" + url;
+        }
+        return url;
+      }
+
+      function handleLogin() {
+        const u = usernameInput.value.trim();
+        const p = passwordInput.value;
+        if (u === VALID_USER && p === VALID_PASS) {
+          loggedIn = true;
+          loginError.textContent = "";
+          closeLogin();
+          controlPanel.style.display = "block";
+          urlStatus.textContent = "Tools unlocked. Enter a URL to begin.";
+          urlStatus.className = "status-text status-text--ok";
+        } else {
+          loginError.textContent = "Invalid credentials";
+        }
+      }
+
+      function handleThemeChange() {
+        const value = themeSelect.value;
+        appRoot.classList.remove("theme-default", "theme-dark", "theme-light", "theme-high-contrast");
+        if (value === "dark") {
+          appRoot.classList.add("theme-dark");
+        } else if (value === "light") {
+          appRoot.classList.add("theme-light");
+        } else if (value === "high-contrast") {
+          appRoot.classList.add("theme-high-contrast");
+        } else {
+          appRoot.classList.add("theme-default");
+        }
+        // Reapply wallpaper if user set one
+        if (wallpaperUrl) {
+          document.body.style.backgroundImage = "url('" + wallpaperUrl + "')";
+          document.body.classList.add("wallpaper-active");
+        } else {
+          document.body.style.backgroundImage = "";
+          document.body.classList.remove("wallpaper-active");
+        }
+      }
+
+      function handleLoadInIframe() {
+        const raw = urlInput.value;
+        const url = normalizeUrl(raw);
+        if (!url) {
+          urlStatus.textContent = "Please enter a URL before loading.";
+          urlStatus.className = "status-text status-text--warning";
+          return;
+        }
+        previewFrame.src = url;
+        urlStatus.textContent = "Loaded: " + url;
+        urlStatus.className = "status-text status-text--ok";
+      }
+
+      function handleOpenInBlank() {
+        const raw = urlInput.value;
+        const url = normalizeUrl(raw);
+        if (!url) {
+          urlStatus.textContent = "Enter a URL before opening a cloaked tab.";
+          urlStatus.className = "status-text status-text--warning";
+          return;
+        }
+        try {
+          const newWin = window.open("about:blank", "_blank");
+          if (!newWin) {
+            urlStatus.textContent = "Popup blocked. Allow popups for this site to use about:blank.";
+            urlStatus.className = "status-text status-text--error";
+            return;
+          }
+          const doc = newWin.document;
+          doc.open();
+          doc.write("<!DOCTYPE html><html><head><title>about:blank</title><style>html,body{margin:0;height:100%;background:#000;}iframe{border:0;width:100%;height:100%;}</style></head><body></body></html>");
+          doc.close();
+          const iframe = doc.createElement("iframe");
+          iframe.src = url;
+          iframe.setAttribute("allowfullscreen", "true");
+          iframe.style.border = "0";
+          iframe.style.width = "100%";
+          iframe.style.height = "100%";
+          doc.body.appendChild(iframe);
+          urlStatus.textContent = "Opened in about:blank.";
+          urlStatus.className = "status-text status-text--ok";
+        } catch (e) {
+          urlStatus.textContent = "Unable to open in about:blank in this browser.";
+          urlStatus.className = "status-text status-text--error";
+        }
+      }
+
+      function handleFullscreen() {
+        fullscreenStatus.textContent = "";
+        fullscreenStatus.className = "status-text";
+        const frameEl = previewFrame;
+        const req =
+          frameEl.requestFullscreen ||
+          frameEl.webkitRequestFullscreen ||
+          frameEl.mozRequestFullScreen ||
+          frameEl.msRequestFullscreen;
+        if (req) {
+          try {
+            req.call(frameEl).then?.(() => {
+              fullscreenStatus.textContent = "Attempted fullscreen.";
+              fullscreenStatus.className = "status-text status-text--ok";
+            }).catch?.(() => {
+              fullscreenStatus.textContent = "Fullscreen not supported or blocked.";
+              fullscreenStatus.className = "status-text status-text--error";
+            });
+          } catch (err) {
+            fullscreenStatus.textContent = "Fullscreen not supported in this browser.";
+            fullscreenStatus.className = "status-text status-text--error";
+          }
+        } else {
+          fullscreenStatus.textContent = "Fullscreen not supported in this browser.";
+          fullscreenStatus.className = "status-text status-text--error";
+        }
+      }
+
+      function handlePanic() {
+        controlPanel.classList.add("hidden");
+        safeView.style.display = "block";
+        // Also make the tab title look safe if user didn't customize it
+        if (!tabTitleInput.value.trim()) {
+          document.title = "Weekly Study Notes";
+        }
+      }
+
+      function handleTabTitleChange() {
+        const value = tabTitleInput.value.trim();
+        if (value) {
+          document.title = value;
+        } else {
+          document.title = "Brotato Balance Patch Shakes Up the Arena";
+        }
+      }
+
+      function handleWallpaperChange(event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) {
+          wallpaperUrl = null;
+          document.body.style.backgroundImage = "";
+          document.body.classList.remove("wallpaper-active");
+          wallpaperStatus.textContent = "Optional: pick an image to skin the background.";
+          return;
+        }
+        if (!file.type.startsWith("image/")) {
+          wallpaperStatus.textContent = "Please choose an image file.";
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          wallpaperUrl = e.target.result;
+          document.body.style.backgroundImage = "url('" + wallpaperUrl + "')";
+          document.body.classList.add("wallpaper-active");
+          wallpaperStatus.textContent = "Wallpaper applied. Switch themes to see how it looks.";
+        };
+        reader.readAsDataURL(file);
+      }
+
+      // Event wiring
+      settingsTrigger.addEventListener("click", openLogin);
+
+      loginBtn.addEventListener("click", handleLogin);
+      cancelLoginBtn.addEventListener("click", closeLogin);
+
+      loginBackdrop.addEventListener("click", function (e) {
+        if (e.target === loginBackdrop) {
+          closeLogin();
+        }
+      });
+
+      [usernameInput, passwordInput].forEach(function (input) {
+        input.addEventListener("keydown", function (e) {
+          if (e.key === "Enter") {
+            handleLogin();
+          }
+        });
+      });
+
+      themeSelect.addEventListener("change", handleThemeChange);
+      loadBtn.addEventListener("click", handleLoadInIframe);
+      blankBtn.addEventListener("click", handleOpenInBlank);
+      fullscreenBtn.addEventListener("click", handleFullscreen);
+      panicBtn.addEventListener("click", handlePanic);
+      tabTitleInput.addEventListener("input", handleTabTitleChange);
+      wallpaperInput.addEventListener("change", handleWallpaperChange);
+
+      // Initial theme
+      appRoot.classList.add("theme-default");
+    })();
   </script>
 </body>
 </html>
