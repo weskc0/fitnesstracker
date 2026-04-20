@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherMood - Landrum Weather & Lifestyle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='70'>🌤️</text></svg>">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="nav-bar">
+            <div class="nav-content">
+                <div class="nav-logo">
+                    <span class="logo-icon">🌤️</span>
+                    <span class="logo-text">WeatherMood</span>
+                </div>
+                <div class="nav-links">
+                    <button class="nav-link active" data-page="weather">Weather</button>
+                    <button class="nav-link" data-page="outfit">Outfit</button>
+                    <button class="nav-link" data-page="forecast">Forecast</button>
+                    <button class="nav-link" data-page="news">News</button>
+                </div>
+                <div class="nav-controls">
+                    <button class="theme-toggle" title="Toggle theme">🌙</button>
+                    <button class="refresh-btn" title="Refresh data">↻</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Weather Page -->
+            <section id="weather-page" class="page active">
+                <!-- Hero Section -->
+                <div class="hero-section">
+                    <div class="location-header">
+                        <h1 class="location-title">Landrum</h1>
+                        <p class="location-subtitle">South Carolina</p>
+                    </div>
+                    
+                    <div class="current-weather-card">
+                        <div class="weather-left">
+                            <div class="big-icon" id="mainWeatherIcon">🌤️</div>
+                            <div class="weather-status" id="weatherStatus">Loading...</div>
+                        </div>
+                        <div class="weather-right">
+                            <div class="big-temp" id="mainTemp">--°F</div>
+                            <div class="weather-details-grid">
+                                <div class="detail">
+                                    <span class="detail-label">Feels Like</span>
+                                    <span class="detail-value" id="feelsLike">--°</span>
+                                </div>
+                                <div class="detail">
+                                    <span class="detail-label">Humidity</span>
+                                    <span class="detail-value" id="humidity">--%</span>
+                                </div>
+                                <div class="detail">
+                                    <span class="detail-label">Wind</span>
+                                    <span class="detail-value" id="wind">-- mph</span>
+                                </div>
+                                <div class="detail">
+                                    <span class="detail-label">UV Index</span>
+                                    <span class="detail-value" id="uv">--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hourly Forecast (Every 3 Hours) -->
+                <div class="section">
+                    <h2 class="section-title">Forecast - Next 24 Hours</h2>
+                    <div class="hourly-carousel" id="hourlyForecast">
+                        <div class="loading-spinner">Loading forecast...</div>
+                    </div>
+                </div>
+
+                <!-- Extended Details -->
+                <div class="details-grid">
+                    <div class="detail-card">
+                        <div class="detail-card-header">
+                            <span class="icon">💨</span>
+                            <span class="title">Wind</span>
+                        </div>
+                        <div class="detail-card-value" id="windDetail">-- mph</div>
+                        <div class="detail-card-subtitle">Gusts up to <span id="windGusts">--</span></div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-card-header">
+                            <span class="icon">💧</span>
+                            <span class="title">Humidity</span>
+                        </div>
+                        <div class="detail-card-value" id="humidityDetail">--%</div>
+                        <div class="humidity-bar">
+                            <div class="humidity-fill" id="humidityFill"></div>
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-card-header">
+                            <span class="icon">🌡️</span>
+                            <span class="title">Pressure</span>
+                        </div>
+                        <div class="detail-card-value" id="pressureDetail">-- mb</div>
+                        <div class="detail-card-subtitle">Sea level</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-card-header">
+                            <span class="icon">👁️</span>
+                            <span class="title">Visibility</span>
+                        </div>
+                        <div class="detail-card-value" id="visibilityDetail">-- mi</div>
+                        <div class="detail-card-subtitle">Clear view</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Outfit Recommendation Page -->
+            <section id="outfit-page" class="page">
+                <div class="outfit-hero">
+                    <div class="outfit-temp-display">
+                        <span id="outfitTemp" class="outfit-temp-big">--°F</span>
+                        <span id="outfitCondition" class="outfit-condition">Loading...</span>
+                    </div>
+                </div>
+
+                <div class="outfit-recommendation">
+                    <h2 class="section-title">What to Wear Today</h2>
+                    <div class="outfit-card" id="outfitCard">
+                        <div class="loading-spinner">Analyzing weather...</div>
+                    </div>
+                </div>
+
+                <div class="outfit-items">
+                    <h3 class="subsection-title">Recommended Items</h3>
+                    <div class="items-grid" id="outfitItems">
+                        <div class="loading-spinner">Loading recommendations...</div>
+                    </div>
+                </div>
+
+                <div class="outfit-tips">
+                    <h3 class="subsection-title">Pro Tips</h3>
+                    <div class="tips-container" id="outfitTips">
+                        <div class="loading-spinner">Loading tips...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detailed Forecast Page -->
+            <section id="forecast-page" class="page">
+                <h2 class="section-title">7-Day Forecast</h2>
+                <div class="forecast-grid" id="forecastGrid">
+                    <div class="loading-spinner">Loading forecast...</div>
+                </div>
+
+                <div class="section" style="margin-top: 40px;">
+                    <h2 class="section-title">Weekly Summary</h2>
+                    <div class="forecast-summary" id="forecastSummary">
+                        <div class="loading-spinner">Loading summary...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- News Page -->
+            <section id="news-page" class="page">
+                <h2 class="section-title">Global News</h2>
+                <div class="news-container" id="newsContainer">
+                    <div class="loading-spinner">Loading news...</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-text">Last updated: <span id="lastUpdated">--:--:--</span></p>
+            <p class="footer-text">Auto-updates daily at 6:00 AM EST</p>
+            <p class="footer-credit">Data: Open-Meteo • NewsAPI • World Monitor</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
