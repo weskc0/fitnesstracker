@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landrum Weather - Current Conditions & Forecasts</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='70'>🌤️</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Theme Toggle -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>🌍 Landrum, SC Weather</h1>
+                    <p class="subtitle">Real-time weather & forecasts</p>
+                </div>
+                <div class="header-right">
+                    <button class="theme-toggle" id="themeToggle" title="Toggle dark/light mode">🌙</button>
+                    <button class="refresh-btn" id="refreshBtn" title="Refresh data">🔄</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="weather">Weather</button>
+            <button class="tab-btn" data-tab="outfit">What to Wear</button>
+            <button class="tab-btn" data-tab="forecast">7-Day</button>
+            <button class="tab-btn" data-tab="news">News</button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Weather Tab -->
+            <section id="weather" class="tab-content active">
+                <div class="weather-main">
+                    <div class="current-weather">
+                        <div class="big-icon" id="weatherIcon">⛅</div>
+                        <div class="temp-display">
+                            <span id="temperature" class="big-temp">--°F</span>
+                            <span id="description" class="weather-desc">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="current-details">
+                        <div class="detail-box">
+                            <span class="label">Feels Like</span>
+                            <span id="feelsLike" class="value">--°</span>
+                        </div>
+                        <div class="detail-box">
+                            <span class="label">Humidity</span>
+                            <span id="humidity" class="value">--%</span>
+                        </div>
+                        <div class="detail-box">
+                            <span class="label">Wind</span>
+                            <span id="windSpeed" class="value">-- mph</span>
+                        </div>
+                        <div class="detail-box">
+                            <span class="label">UV Index</span>
+                            <span id="uvIndex" class="value">--</span>
+                        </div>
+                        <div class="detail-box">
+                            <span class="label">Pressure</span>
+                            <span id="pressure" class="value">-- mb</span>
+                        </div>
+                        <div class="detail-box">
+                            <span class="label">Visibility</span>
+                            <span id="visibility" class="value">-- mi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3-Hour Forecast -->
+                <div class="section">
+                    <h2>Next 24 Hours (Every 3 Hours)</h2>
+                    <div id="hourlyForecast" class="forecast-grid">
+                        <div class="loading">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Last Updated -->
+                <p class="updated-text">Last updated: <span id="lastUpdated">--:--:--</span></p>
+            </section>
+
+            <!-- Outfit Tab -->
+            <section id="outfit" class="tab-content">
+                <div class="outfit-container">
+                    <div class="outfit-header">
+                        <div id="outfitTemp" class="outfit-temp">--°F</div>
+                        <div id="outfitCondition" class="outfit-condition">Loading...</div>
+                    </div>
+                    
+                    <div id="outfitCard" class="outfit-card">
+                        <div class="loading">Analyzing weather...</div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Recommended Items</h3>
+                        <div id="outfitItems" class="items-grid">
+                            <div class="loading">Loading...</div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Tips</h3>
+                        <div id="outfitTips" class="tips-list">
+                            <div class="loading">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7-Day Forecast Tab -->
+            <section id="forecast" class="tab-content">
+                <div class="section">
+                    <h2>7-Day Forecast</h2>
+                    <div id="dailyForecast" class="forecast-grid">
+                        <div class="loading">Loading...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- News Tab -->
+            <section id="news" class="tab-content">
+                <div class="section">
+                    <h2>Global News</h2>
+                    <div id="newsContainer" class="news-grid">
+                        <div class="loading">Loading news...</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Data: Open-Meteo • NewsAPI</p>
+            <p>Auto-updates daily at 6:00 AM EST</p>
+            <p>Last built: <span id="buildTime">--</span></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
