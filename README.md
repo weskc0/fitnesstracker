@@ -1,6 +1,6 @@
-# 🌍 Landrum Weather & Global Events Dashboard
 
-A real-time weather and global news dashboard for Landrum, SC that automatically updates daily at 6:00 AM EST using GitHub Actions.
+
+A real-time weather and global news dashboard
 
 ## Features
 
